@@ -14,15 +14,17 @@ import { Footer } from "@/components/footer"
 
 export default function Portfolio() {
   const [showTerminal, setShowTerminal] = useState(true)
+  const [terminalComplete, setTerminalComplete] = useState(false)
   const [activeSection, setActiveSection] = useState("hero")
   const { scrollYProgress } = useScroll()
   const opacity = useTransform(scrollYProgress, [0, 0.2], [1, 0])
   const scale = useTransform(scrollYProgress, [0, 0.2], [1, 0.8])
+  const [navigationReady, setNavigationReady] = useState(false)
 
   useEffect(() => {
     const handleScroll = () => {
       const sections = ["hero", "about", "skills", "projects", "experience", "contact"]
-      const scrollPosition = window.scrollY + 100
+      const scrollPosition = window.scrollY + 300
 
       for (const section of sections) {
         const element = document.getElementById(section)
@@ -36,22 +38,52 @@ export default function Portfolio() {
       }
     }
 
-    if (!showTerminal) {
+    if (terminalComplete) {
       window.addEventListener("scroll", handleScroll)
+      handleScroll()
       return () => window.removeEventListener("scroll", handleScroll)
     }
-  }, [showTerminal])
+  }, [terminalComplete])
 
   const scrollToSection = (sectionId: string) => {
     document.getElementById(sectionId)?.scrollIntoView({ behavior: "smooth" })
   }
 
+  const handleTerminalComplete = () => {
+    setShowTerminal(false)
+    // Add small delay to let terminal fade out smoothly
+    setTimeout(() => {
+      setTerminalComplete(true)
+    }, 300)
+  }
+
+  const handleNavigationReady = () => {
+    setNavigationReady(true)
+  }
+
   return (
     <div className="min-h-screen bg-black text-white overflow-x-hidden">
-      <AnimatePresence>{showTerminal && <TerminalLoader onComplete={() => setShowTerminal(false)} />}</AnimatePresence>
+      <AnimatePresence>{showTerminal && <TerminalLoader onComplete={handleTerminalComplete} />}</AnimatePresence>
 
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: showTerminal ? 0 : 1 }} transition={{ duration: 1 }}>
-        <Navigation activeSection={activeSection} onSectionClick={scrollToSection} />
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: terminalComplete ? 1 : 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <Navigation
+          activeSection={activeSection}
+          onSectionClick={scrollToSection}
+          onNavigationReady={handleNavigationReady}
+          startTyping={terminalComplete}
+        />
+      </motion.div>
+
+      {/* Main content appears shortly after terminal with smooth stagger */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: terminalComplete ? 1 : 0, y: terminalComplete ? 0 : 20 }}
+        transition={{ duration: 0.8, delay: 0.2 }}
+      >
         <HeroSection opacity={opacity} scale={scale} />
         <AboutSection />
         <SkillsSection />

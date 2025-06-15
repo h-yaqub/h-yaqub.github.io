@@ -46,10 +46,7 @@ export function ProjectsSection() {
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
         >
-          <h2 className="text-4xl font-bold mb-12 text-center">
-            <span className="text-green-400">featured</span>.<span className="text-blue-400">projects</span>()
-          </h2>
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="grid md:grid-cols-2 gap-8 mt-8">
             {projects.map((project, index) => (
               <motion.div
                 key={project.title}

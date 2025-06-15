@@ -35,10 +35,7 @@ export function SkillsSection() {
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
         >
-          <h2 className="text-4xl font-bold mb-12 text-center">
-            <span className="text-green-400">skills</span>.<span className="text-blue-400">stack</span>
-          </h2>
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-3 gap-8 mt-8">
             {skillCategories.map((category, index) => (
               <motion.div
                 key={category.category}

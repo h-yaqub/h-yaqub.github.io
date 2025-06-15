@@ -36,10 +36,7 @@ export function ExperienceSection() {
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
         >
-          <h2 className="text-4xl font-bold mb-12 text-center">
-            <span className="text-green-400">work</span>.<span className="text-blue-400">history</span>
-          </h2>
-          <div className="space-y-8">
+          <div className="space-y-8 mt-8">
             {experiences.map((job, index) => (
               <motion.div
                 key={job.title}
